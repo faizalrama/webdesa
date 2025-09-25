@@ -12,6 +12,8 @@ import Home from "./pages/Home";
 import Potensi from "./pages/Potensi";
 import Struktur from "./pages/Struktur";
 import Kontak from "./pages/Kontak";
+import Berita from "./pages/Berita";
+import BeritaDetail from "./pages/BeritaDetail";
 import AdminLogin from "./pages/admin/Login";
 import AdminDashboard from "./pages/admin/Dashboard";
 import { ProtectedRoute } from "./components/admin/ProtectedRoute";
@@ -41,6 +43,8 @@ const App = () => (
                 <Route path="/potensi" element={<Potensi />} />
                 <Route path="/struktur" element={<Struktur />} />
                 <Route path="/kontak" element={<Kontak />} />
+                <Route path="/berita" element={<Berita />} />
+                <Route path="/berita/:id" element={<BeritaDetail />} />
                 
                 {/* Admin Routes */}
                 <Route path="/admin/login" element={<AdminLogin />} />
