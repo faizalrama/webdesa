@@ -1,8 +1,7 @@
-# app.py
-from flask import Flask
-from config import Config
 from app import create_app
+from config import Config
 
+# Create app instance
 app = create_app(Config)
 
 if __name__ == "__main__":

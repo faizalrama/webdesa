@@ -3,8 +3,7 @@ import os
 from flask import Blueprint, request, current_app, url_for
 from werkzeug.utils import secure_filename
 
-bp = Blueprint('upload', __name__, url_prefix='/api/upload')
-
+bp = Blueprint('upload', __name__)  # Hapus url_prefix dari sini
 ALLOWED_EXTENSIONS = {"png", "jpg", "jpeg", "gif"}
 
 def allowed_file(filename):

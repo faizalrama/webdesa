@@ -5,7 +5,7 @@ from ..models.user import User
 from ..schemas.user import UserSchema
 from flask_jwt_extended import create_access_token, jwt_required, get_jwt_identity
 
-bp = Blueprint("auth", __name__, url_prefix="/api/auth")
+bp = Blueprint("auth", __name__)  # Hapus url_prefix dari sini
 user_schema = UserSchema()
 
 @bp.route('/login', methods=['POST'])

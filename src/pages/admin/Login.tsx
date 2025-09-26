@@ -34,25 +34,50 @@ export default function AdminLogin() {
 
   // Redirect if already authenticated
   if (isAuthenticated) {
+    console.log('User already authenticated, redirecting to /admin');
     return <Navigate to="/admin" replace />;
   }
 
   const onSubmit = async (data: LoginForm) => {
     setIsLoading(true);
     setError('');
+    console.log('🔄 Login process started...', data);
 
     try {
+      console.log('📤 Calling login function with:', { 
+        username: data.username, 
+        password: '***' // Jangan log password sebenarnya
+      });
+      
       await login(data.username, data.password);
+      
+      console.log('✅ Login successful! Navigating to /admin');
       navigate('/admin', { replace: true });
+      
     } catch (err: any) {
+      console.error('❌ Login error:', err);
+      console.error('❌ Error details:', {
+        message: err.message,
+        response: err.response?.data,
+        stack: err.stack
+      });
+      
       setError(
         err.response?.data?.message || 
+        err.message ||
         'Login gagal. Periksa username dan password Anda.'
       );
     } finally {
+      console.log('🏁 Login process finished');
       setIsLoading(false);
     }
   };
+
+  console.log('🔍 Login component rendered', { 
+    isAuthenticated, 
+    isLoading,
+    hasError: !!error 
+  });
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-primary/5 to-primary/10 p-4">
@@ -129,7 +154,7 @@ export default function AdminLogin() {
 
         <div className="text-center">
           <p className="text-xs text-muted-foreground">
-            Demo: username: admin, password: password123
+            Demo: username: admin, password: admin123
           </p>
         </div>
       </div>
