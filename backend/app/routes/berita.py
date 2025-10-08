@@ -9,7 +9,8 @@ bp = Blueprint('berita', __name__, url_prefix='/api/berita')
 berita_schema = BeritaSchema()
 berita_list_schema = BeritaSchema(many=True)
 
-@bp.route('/', methods=['GET'])
+@bp.route('', methods=['GET'])
+
 def list_berita():
     try:
         page = int(request.args.get('page', 1))
@@ -31,11 +32,28 @@ def detail_berita(id):
     berita = Berita.query.get_or_404(id)
     return berita_schema.dump(berita)
 
-@bp.route('/', methods=['POST'])
+@bp.route('', methods=['POST'])
+
 @jwt_required()
 def create_berita():
-    data = request.json or {}
-    obj = berita_schema.load(data)
+    print("FORM DATA:", request.form)   # ⬅️ cek data yang sampai
+    print("FILES:", request.files)
+    data = request.form.to_dict()
+    # file = request.files.get("featured_image")
+
+    obj = Berita(
+        title=data.get("title"),
+        summary=data.get("summary"),
+        content=data.get("content"),
+        image_url=data.get("image_url")
+        # featured_image=file.filename if file else None
+    )
+
+    # if file:
+    #     # simpan file ke folder static/uploads (buat dulu foldernya)
+    #     filepath = f"static/uploads/{file.filename}"
+    #     file.save(filepath)
+
     db.session.add(obj)
     db.session.commit()
     return berita_schema.dump(obj), 201
@@ -44,9 +62,12 @@ def create_berita():
 @jwt_required()
 def update_berita(id):
     berita = Berita.query.get_or_404(id)
-    data = request.json or {}
-    for key, value in data.items():
-        setattr(berita, key, value)
+    data = request.form.to_dict()
+    berita.title = data.get("title", berita.title)
+    berita.summary = data.get("summary", berita.summary)
+    berita.content = data.get("content", berita.content)
+    berita.image_url = data.get("image_url", berita.image_url)
+
     db.session.commit()
     return berita_schema.dump(berita)
 

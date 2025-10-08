@@ -18,6 +18,11 @@ import AdminLogin from "./pages/admin/Login";
 import AdminDashboard from "./pages/admin/Dashboard";
 import { ProtectedRoute } from "./components/admin/ProtectedRoute";
 import NotFound from "./pages/NotFound";
+import AdminBerita from "./pages/admin/Berita";
+import AdminPotensi from "./pages/admin/Potensi";
+import AdminStruktur from "./pages/admin/Struktur";
+import AdminKontak from "./pages/admin/Kontak";
+
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -45,6 +50,7 @@ const App = () => (
                 <Route path="/kontak" element={<Kontak />} />
                 <Route path="/berita" element={<Berita />} />
                 <Route path="/berita/:id" element={<BeritaDetail />} />
+                <Route path="/potensi/:id" element={<BeritaDetail />} />
                 
                 {/* Admin Routes */}
                 <Route path="/admin/login" element={<AdminLogin />} />
@@ -53,7 +59,42 @@ const App = () => (
                     <AdminDashboard />
                   </ProtectedRoute>
                 } />
-                
+                <Route
+  path="/admin/berita"
+  element={
+    <ProtectedRoute>
+      <AdminBerita />
+    </ProtectedRoute>
+  }
+/>
+
+<Route
+  path="/admin/potensi"
+  element={
+    <ProtectedRoute>
+      <AdminPotensi />
+    </ProtectedRoute>
+  }
+/>
+
+<Route
+  path="/admin/struktur"
+  element={
+    <ProtectedRoute>
+      <AdminStruktur />
+    </ProtectedRoute>
+  }
+/>
+
+<Route
+  path="/admin/kontak"
+  element={
+    <ProtectedRoute>
+      <AdminKontak />
+    </ProtectedRoute>
+  }
+/>
+               
                 {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
                 <Route path="*" element={<NotFound />} />
               </Routes>

@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 // API Base URL - set this in your .env file as VITE_API_BASE_URL
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000/api';
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://192.168.11.154:5000/api';
 
 // Create axios instance
 const api = axios.create({
@@ -9,6 +9,7 @@ const api = axios.create({
   headers: {
     'Content-Type': 'application/json',
   },
+  withCredentials: true,
 });
 
 // Request interceptor to add auth token
@@ -49,14 +50,24 @@ export interface Potensi {
   updated_at: string;
 }
 
+
+
 export interface Berita {
   id: number;
   title: string;
   content: string;
-  excerpt: string;
-  featured_image: string;
+  summary: string;
+  image_url: string;
   created_at: string;
   updated_at: string;
+}
+
+export interface BeritaInput {
+  title: string;
+  content: string;
+  summary: string;
+  id:number;
+  image_url?: string; // File saat upload, atau string jika edit
 }
 
 export interface Struktur {
@@ -86,6 +97,8 @@ export interface AuthResponse {
     id: number;
     username: string;
     email: string;
+    role?: string;
+    created_at?: string; // tambahkan ini
   };
 }
 
@@ -96,6 +109,8 @@ export interface PaginatedResponse<T> {
   per_page: number;
   total_pages: number;
 }
+
+
 
 // API Functions
 export const potensiApi = {
@@ -112,16 +127,48 @@ export const potensiApi = {
 };
 
 export const beritaApi = {
-  getAll: (page = 1, limit = 10) => 
-    api.get<PaginatedResponse<Berita>>(`/berita?page=${page}&limit=${limit}`),
-  getById: (id: number) => 
-    api.get<Berita>(`/berita/${id}`),
-  create: (data: Omit<Berita, 'id' | 'created_at' | 'updated_at'>) => 
-    api.post<Berita>('/berita', data),
-  update: (id: number, data: Partial<Berita>) => 
-    api.put<Berita>(`/berita/${id}`, data),
-  delete: (id: number) => 
-    api.delete(`/berita/${id}`),
+  getAll: (page = 1, limit = 10) =>
+    api.get<PaginatedResponse<Berita>>(`/berita/?page=${page}&limit=${limit}`),
+
+  getById: (id: number) =>
+    api.get<Berita>(`/berita/${id}/`),
+
+  create: (data: BeritaInput) => {
+    const formData = new FormData();
+    formData.append("title", data.title);
+    formData.append("excerpt", data.summary);
+    formData.append("content", data.content);
+    formData.append("image_url", data.image_url);
+    
+    // if (data.featured_image instanceof File) {
+      //   formData.append("featured_image", data.featured_image);
+      // }
+      
+      return api.post<Berita>("/berita/", formData, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
+    },
+    
+    update: (id: number, data: BeritaInput) => {
+      const formData = new FormData();
+      formData.append("title", data.title);
+      formData.append("excerpt", data.summary);
+      formData.append("content", data.content);
+      formData.append("image_url", data.image_url);
+
+    // if (data.featured_image instanceof File) {
+    //   formData.append("featured_image", data.featured_image);
+    // } else if (typeof data.featured_image === "string") {
+    //   formData.append("featured_image", data.featured_image);
+    // }
+
+    return api.put<Berita>(`/berita/${id}/`, formData, {
+      headers: { "Content-Type": "multipart/form-data" },
+    });
+  },
+
+  delete: (id: number) =>
+    api.delete(`/berita/${id}/`),
 };
 
 export const strukturApi = {

@@ -22,3 +22,20 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+# Abaikan virtual environment
+venv/
+.env/
+
+# Abaikan file sistem umum
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Abaikan file editor
+.vscode/
+.idea/
+
+# Abaikan file sementara
+*.log
+*.sqlite3

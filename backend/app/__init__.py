@@ -1,5 +1,6 @@
 from flask import Flask
 from .extensions import db, migrate, ma, jwt, cors
+from .routes import register_routes   # ✅ import register_routes
 
 def create_app(config_object):
     app = Flask(__name__)
@@ -10,14 +11,19 @@ def create_app(config_object):
     migrate.init_app(app, db)  # Pastikan migrate di-init dengan db
     ma.init_app(app)
     jwt.init_app(app)
-    cors.init_app(app, resources={r"/api/*": {"origins": app.config.get("CORS_ORIGINS")}})
+    cors.init_app(app)
+
+    cors.init_app(
+        app,
+        supports_credentials=True,
+        origins=["http://192.168.11.154:8080"],  # asal frontend kamu
+    )
+
 
     # Import models setelah db diinisialisasi
     from .models import user, berita, potensi, struktur, kontak
 
-    # Import dan register blueprints
-    from .routes import auth, berita, potensi, struktur, kontak, upload
-    from .routes import register_routes
+    # ✅ Daftarkan semua route & blueprint
     register_routes(app)
 
     # Create upload folder

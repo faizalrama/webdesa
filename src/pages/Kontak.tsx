@@ -12,7 +12,7 @@ const mockKontak: KontakType = {
   phone: '+62 123 456 789',
   email: 'info@desamakmur.go.id',
   website: 'www.desamakmur.go.id',
-  maps_embed: 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3966.521260322283!2d106.8195613!3d-6.1753924!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e69f24e.%3A0x5d53b3dc9c2b8b7a!2sJakarta!5e0!3m2!1sen!2sid!4v1234567890123',
+  maps_embed: 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d4691.7708895224905!2d122.85521131485142!3d-5.611909575547258!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2da4173dd8e95545%3A0x747f049d478cf9d7!2sWabula%20Satu!5e0!3m2!1sid!2sid!4v1759142905229!5m2!1sid!2sid" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade',
   created_at: '2024-01-01',
   updated_at: '2024-01-01'
 };

@@ -15,7 +15,7 @@ const mockBerita = [
     title: 'Program Bantuan Sosial untuk Warga Kurang Mampu',
     excerpt: 'Pemerintah desa meluncurkan program bantuan sosial berupa sembako untuk membantu warga kurang mampu menghadapi situasi ekonomi yang sulit.',
     content: 'Program bantuan sosial ini merupakan inisiatif dari pemerintah desa untuk membantu warga yang terdampak ekonomi...',
-    featured_image: '/api/placeholder/400/240',
+    featured_image: 'https://i.pinimg.com/736x/f2/50/96/f250969ef79a24a63f0eb0a76089b1d2.jpg',
     author: 'Admin Desa',
     published_at: '2024-01-15',
     category: 'Sosial',
@@ -136,7 +136,7 @@ export default function Berita() {
             </Card>
           ))}
         </div>
-
+        
         {(!berita || berita.length === 0) && (
           <div className="text-center py-12">
             <p className="text-muted-foreground">Belum ada berita yang dipublikasikan.</p>

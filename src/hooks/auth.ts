@@ -1,6 +1,6 @@
 import React, { useState, useEffect, createContext, useContext } from 'react';
 import type { ReactNode } from 'react';
-import { authApi, AuthResponse } from '@/lib/api';
+import { authApi, AuthResponse  } from '@/lib/api';
 
 interface User {
   id: number;
@@ -55,26 +55,30 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   const login = async (username: string, password: string) => {
   try {
-    console.log('Sending login request...', { username, password });
-    
     const response = await authApi.login(username, password);
-    console.log('Login response:', response);
-    
     const { access_token, user: userData } = response.data;
-    console.log('Token:', access_token);
-    console.log('User data:', userData);
-    
+
+    // Mapping agar sesuai tipe User
+    const userParsed: User = {
+      id: Number(userData.id),        // pastikan number
+      username: userData.username,
+      email: userData.email,
+      role: userData.role || 'admin', // default 'admin' kalau tidak ada dari backend
+      created_at: userData.created_at
+    };
+
+    // Simpan di localStorage
     localStorage.setItem('auth_token', access_token);
-    localStorage.setItem('user_data', JSON.stringify(userData));
-    setUser(userData);
-    
-    console.log('Login successful!');
+    localStorage.setItem('user_data', JSON.stringify(userParsed));
+
+    // Set user state
+    setUser(userParsed);
+
   } catch (error) {
     console.error('Login error:', error);
     throw error;
   }
 };
-
   
 
   const logout = () => {
