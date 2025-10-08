@@ -33,27 +33,18 @@ def detail_berita(id):
     return berita_schema.dump(berita)
 
 @bp.route('', methods=['POST'])
-
 @jwt_required()
 def create_berita():
-    print("FORM DATA:", request.form)   # ⬅️ cek data yang sampai
-    print("FILES:", request.files)
-    data = request.form.to_dict()
-    # file = request.files.get("featured_image")
+    data = request.get_json()
+    if not data:
+        return {"msg": "Request body must be JSON"}, 400
 
     obj = Berita(
         title=data.get("title"),
         summary=data.get("summary"),
         content=data.get("content"),
         image_url=data.get("image_url")
-        # featured_image=file.filename if file else None
     )
-
-    # if file:
-    #     # simpan file ke folder static/uploads (buat dulu foldernya)
-    #     filepath = f"static/uploads/{file.filename}"
-    #     file.save(filepath)
-
     db.session.add(obj)
     db.session.commit()
     return berita_schema.dump(obj), 201
@@ -62,12 +53,14 @@ def create_berita():
 @jwt_required()
 def update_berita(id):
     berita = Berita.query.get_or_404(id)
-    data = request.form.to_dict()
+    data = request.get_json()
+    if not data:
+        return {"msg": "Request body must be JSON"}, 400
+
     berita.title = data.get("title", berita.title)
     berita.summary = data.get("summary", berita.summary)
     berita.content = data.get("content", berita.content)
     berita.image_url = data.get("image_url", berita.image_url)
-
     db.session.commit()
     return berita_schema.dump(berita)
 

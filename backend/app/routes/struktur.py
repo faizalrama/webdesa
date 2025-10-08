@@ -34,8 +34,15 @@ def detail_struktur(id):
 @bp.route('/', methods=['POST'])
 @jwt_required()
 def create_struktur():
-    data = request.json or {}
-    obj = struktur_schema.load(data)
+    data = request.get_json()
+    if not data:
+        return {"msg": "Request body must be JSON"}, 400
+
+    obj = Struktur(
+        name=data.get("name"),
+        position=data.get("position"),
+        photo_url=data.get("photo_url")
+    )
     db.session.add(obj)
     db.session.commit()
     return struktur_schema.dump(obj), 201
@@ -44,9 +51,14 @@ def create_struktur():
 @jwt_required()
 def update_struktur(id):
     struktur = Struktur.query.get_or_404(id)
-    data = request.json or {}
-    for key, value in data.items():
-        setattr(struktur, key, value)
+    data = request.get_json()
+    if not data:
+        return {"msg": "Request body must be JSON"}, 400
+
+    struktur.name = data.get("name", struktur.name)
+    struktur.position = data.get("position", struktur.position)
+    struktur.photo_url = data.get("photo_url", struktur.photo_url)
+
     db.session.commit()
     return struktur_schema.dump(struktur)
 
