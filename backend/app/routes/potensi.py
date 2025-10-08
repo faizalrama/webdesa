@@ -34,8 +34,17 @@ def detail_potensi(id):
 @bp.route('/', methods=['POST'])
 @jwt_required()
 def create_potensi():
-    data = request.json or {}
-    obj = potensi_schema.load(data)
+    data = request.get_json()
+    if not data:
+        return {"msg": "Request body must be JSON"}, 400
+
+    obj = Potensi(
+        title=data.get("title"),
+        excerpt=data.get("excerpt"),
+        description=data.get("description"),
+        image_url=data.get("image_url"),
+        location=data.get("location")
+    )
     db.session.add(obj)
     db.session.commit()
     return potensi_schema.dump(obj), 201
@@ -44,9 +53,16 @@ def create_potensi():
 @jwt_required()
 def update_potensi(id):
     potensi = Potensi.query.get_or_404(id)
-    data = request.json or {}
-    for key, value in data.items():
-        setattr(potensi, key, value)
+    data = request.get_json()
+    if not data:
+        return {"msg": "Request body must be JSON"}, 400
+
+    potensi.title = data.get("title", potensi.title)
+    potensi.excerpt = data.get("excerpt", potensi.excerpt)
+    potensi.description = data.get("description", potensi.description)
+    potensi.image_url = data.get("image_url", potensi.image_url)
+    potensi.location = data.get("location", potensi.location)
+
     db.session.commit()
     return potensi_schema.dump(potensi)
 

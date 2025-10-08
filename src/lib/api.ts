@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 // API Base URL - set this in your .env file as VITE_API_BASE_URL
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://192.168.11.154:5000/api';
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://127.0.0.1:5000/api';
 
 // Create axios instance
 const api = axios.create({
